@@ -70,7 +70,7 @@ function App() {
       request_body["intitle"] = inTitle;
     }
 
-    var response_ = await fetch("https://teamwave.onrender.com/", {
+    var response_ = await fetch(process.env.REACT_APP_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(request_body),
@@ -95,6 +95,7 @@ function App() {
     setNextDisable(false);
     setDisabled(false);
   }
+  console.log(process.env.REACT_APP_URL);
 
   function pagination_next(e) {
     const page_const = page + 1;
