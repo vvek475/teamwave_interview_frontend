@@ -14,6 +14,7 @@ function App() {
   const [inTitle, setIntitle] = useState();
   const [response, setResponse] = useState();
   const [disabled, setDisabled] = useState(false);
+  const [nextdisable, setNextDisable] = useState(false);
 
   useEffect(() => {}, []);
 
@@ -22,11 +23,20 @@ function App() {
 
     // disable all buttons till response reccieved to avoid multiple calls being made
     setDisabled(true);
+    setNextDisable(true);
 
     var request_body = {};
 
     if (!inTitle && !tagged) {
       alert("Please enter atleast on intitle or tagged");
+      setNextDisable(false);
+      setDisabled(false);
+      return;
+    }
+    if (page_const > 25 || page_const < 1) {
+      alert("Reached maximum limit");
+      setNextDisable(false);
+      setDisabled(false);
       return;
     }
     if (page_const) {
@@ -69,6 +79,11 @@ function App() {
     if (response_.status === 200) {
       response_ = await response_.json();
       setResponse(response_["items"]);
+
+      if (response_["items"].length === 0) {
+        const page_ = page - 1;
+        setPage(page_);
+      }
     } else {
       setResponse();
       try {
@@ -77,6 +92,7 @@ function App() {
         alert("Bad request or offline");
       }
     }
+    setNextDisable(false);
     setDisabled(false);
   }
 
@@ -118,7 +134,11 @@ function App() {
         <button disabled={disabled} className="prev" onClick={pagination_prev}>
           prev
         </button>
-        <button disabled={disabled} className="next" onClick={pagination_next}>
+        <button
+          disabled={nextdisable}
+          className="next"
+          onClick={pagination_next}
+        >
           next
         </button>
       </div>
