@@ -95,7 +95,6 @@ function App() {
     setNextDisable(false);
     setDisabled(false);
   }
-  console.log(process.env.REACT_APP_URL);
 
   function pagination_next(e) {
     const page_const = page + 1;
